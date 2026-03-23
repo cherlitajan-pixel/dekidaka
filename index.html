@@ -3,32 +3,123 @@
 * { box-sizing:border-box; margin:0; padding:0; }
 .wrap { padding:10px; font-family:var(--font-sans,sans-serif); }
 .top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:6px; flex-wrap:wrap; gap:6px; }
-.ttl { font-size:14px; font-weight:500; color:var(--color-text-primary); }
-.sub { font-size:11px; color:var(--color-text-secondary); margin-top:2px; }
+.ttl { font-size:16px; font-weight:500; color:var(--color-text-primary); }
+.sub { font-size:13px; color:var(--color-text-secondary); margin-top:2px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
 .legend { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
 .li { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--color-text-secondary); }
 .lb { width:10px; height:10px; border-radius:2px; }
 .metrics { display:flex; gap:6px; margin-bottom:8px; }
-.mc { flex:1; background:var(--color-background-secondary); border-radius:6px; padding:6px 8px; }
-.ml { font-size:10px; color:var(--color-text-secondary); }
-.mv { font-size:16px; font-weight:500; }
+.mc { flex:1; background:var(--color-background-secondary); border-radius:6px; padding:6px 8px; border: 1px solid var(--color-border-tertiary,#dcdedf); }
+.ml { font-size:14px; color:var(--color-text-secondary); text-align: center; }
+.mv { font-size:24px; font-weight:500; text-align: center; display: flex; flex-direction: column; justify-content: center; min-height: 60px;}
+/* Red Points formula card */
+.mc-red-rows { margin-top:4px; display:flex; flex-direction:column; gap:2px; }
+.mc-red-row { display:flex; justify-content:space-between; align-items:center; gap:6px; }
+.mc-red-lbl { font-size:10px; color:var(--color-text-secondary); white-space:nowrap; }
+.mc-red-num { font-size:12px; font-weight:600; color:var(--color-text-primary); }
+.mc-red-divider { border:none; border-top:1px solid var(--color-border-tertiary,#d1d5db); margin:3px 0; }
+.mc-red-result-row { display:flex; justify-content:flex-end; align-items:baseline; gap:4px; }
+.mc-red-eq { font-size:10px; color:var(--color-text-secondary); }
+.mc-red-val { font-size:16px; font-weight:600; }
 .grid { display:grid; grid-template-columns:repeat(7,1fr); gap:5px; }
 .day-card { background:var(--color-background-primary); border:0.5px solid var(--color-border-tertiary); border-radius:8px; overflow:hidden; }
-.day-header { padding:5px 6px 3px; border-bottom:0.5px solid var(--color-border-tertiary); background:var(--color-background-secondary); display:flex; justify-content:center; align-items:baseline; }
+.day-header { padding:5px 6px 4px; border-bottom:0.5px solid var(--color-border-tertiary); background:var(--color-background-secondary); display:flex; flex-direction:column; align-items:center; gap:2px; }
 .day-name { font-size:13px; font-weight:600; }
-.day-oa { font-size:11px; font-weight:500; }
-.chart-wrap { position:relative; height:360px; padding:4px 4px 0; }
+.day-oa-val { font-size:11px; font-weight:600; }
+.chart-wrap { position:relative; padding:4px 4px 0; }
 .grid-outer { position:relative; }
 .axis-line { display:flex; align-items:center; gap:6px; position:absolute; left:0; right:0; z-index:20; pointer-events:none; }
 .axis-lbl { font-size:9px; font-weight:500; color:#94A3B8; white-space:nowrap; }
 .axis-hr { flex:1; height:1px; background:#94A3B8; opacity:0.4; }
+
+/* ── Shift separator line (All Shift only) ── */
+.shift-sep { position:absolute; left:0; right:0; z-index:15; pointer-events:none; display:none; }
+.shift-sep-line { border-top:1px dashed rgba(148,163,184,0.5); margin:0 4px; }
+.shift-sep-lbl { font-size:8px; color:#94A3B8; text-align:center; margin-top:1px; }
+
+/* ── Shift dropdown ── */
+.shift-wrap { position:relative; display:inline-block; margin-top:4px; }
+.shift-btn {
+  display:inline-flex; align-items:center; gap:5px;
+  padding:4px 10px 4px 12px;
+  background:#2D2D2D; color:#fff;
+  border:none; border-radius:8px;
+  font-size:12px; font-weight:500;
+  cursor:pointer; user-select:none;
+  transition:background .15s;
+}
+.shift-btn:hover { background:#3a3a3a; }
+.shift-btn .caret { font-size:10px; opacity:.7; }
+.shift-menu {
+  display:none; position:absolute; top:calc(100% + 4px); left:0;
+  background:#2D2D2D; border-radius:10px;
+  padding:4px; min-width:150px; z-index:200;
+  box-shadow:0 4px 16px rgba(0,0,0,.35);
+}
+.shift-menu.open { display:block; }
+.shift-item {
+  display:flex; align-items:center; gap:8px;
+  padding:7px 12px; border-radius:6px;
+  font-size:13px; color:#fff;
+  cursor:pointer; white-space:nowrap;
+  transition:background .12s;
+}
+.shift-item:hover { background:#3D3D3D; }
+.shift-item .chk { width:14px; font-size:12px; flex-shrink:0; }
+
+/* ── PPAS Table ── */
+.ppas-box { margin-top:30px; border:1px solid var(--color-border-tertiary,#d1d5db); border-radius:8px; overflow:hidden; }
+.ppas-box-hdr { padding:7px 12px; font-size:12px; font-weight:600; color:var(--color-text-primary); background:var(--color-background-secondary); border-bottom:1px solid var(--color-border-tertiary,#d1d5db); letter-spacing:.3px; text-align: center;}
+.ppas-wrap { overflow-x:auto; }
+.ppas-tbl { width:100%; border-collapse:collapse; font-size:11px; }
+.ppas-tbl th, .ppas-tbl td { border:0.5px solid var(--color-border-tertiary,#d1d5db); padding:4px 6px; white-space:nowrap; }
+.ppas-tbl th { background:var(--color-background-secondary); font-weight:600; text-align:center; font-size:11px; }
+.ppas-td-time { text-align:left; font-size:10px; color:var(--color-text-primary); min-width:104px; }
+.ppas-td-plan { text-align:center; font-size:10px; color:var(--color-text-secondary); min-width:56px; }
+.ppas-th-date { text-align:center; font-size:10px; font-weight:500; }
+/* Diagonal data cell */
+.ppas-cell-diag {
+  position:relative; min-width:58px; min-height:38px;
+  padding:0; overflow:hidden; vertical-align:top;
+}
+.ppas-cell-diag::before {
+  content:''; position:absolute; inset:0; pointer-events:none; z-index:0;
+  background: linear-gradient(
+    to bottom right,
+    transparent calc(50% - 0.5px),
+    var(--color-border-tertiary,#c8cacc) calc(50% - 0.5px),
+    var(--color-border-tertiary,#c8cacc) calc(50% + 0.5px),
+    transparent calc(50% + 0.5px)
+  );
+}
+.ppas-act  { position:absolute; top:3px; left:4px; font-size:10px; font-weight:600; z-index:1; }
+.ppas-pln  { position:absolute; bottom:3px; right:4px; font-size:9px; color:var(--color-text-secondary); z-index:1; }
+/* Dashed sub-column (right half of each day) */
+.ppas-cell-sub { min-width:26px; border-left:1px dashed var(--color-border-tertiary,#d1d5db) !important; }
+.ppas-tr-sep td { background:rgba(148,163,184,0.08); font-size:9px; color:#94A3B8; text-align:center; padding:2px; font-style:italic; border-color:rgba(148,163,184,0.3); }
+.ppas-tr-total td { font-weight:700; background:var(--color-background-secondary); font-size:11px; text-align:center; }
+.ppas-tr-check td { font-size:10px; color:var(--color-text-secondary); text-align:center; background:var(--color-background-secondary); }
 </style>
 
 <div class="wrap">
   <div class="top">
     <div>
       <div class="ttl">Production Dekidaka — 3rd SE Rotor Assy (A218)</div>
-      <div class="sub">Week 09/03–15/03/2026 · Day shift</div>
+      <div class="sub">
+        <span>Week 09/03–15/03/2026</span>
+        <span>·</span>
+        <div class="shift-wrap">
+          <button class="shift-btn" id="shift-btn" onclick="toggleShiftMenu()">
+            <span id="shift-label">All Shift</span>
+            <span class="caret">▼</span>
+          </button>
+          <div class="shift-menu" id="shift-menu">
+            <div class="shift-item" data-value="all"   onclick="selectShift('all')">  <span class="chk">✓</span>All Shift</div>
+            <div class="shift-item" data-value="day"   onclick="selectShift('day')">  <span class="chk"> </span>Day Shift</div>
+            <div class="shift-item" data-value="night" onclick="selectShift('night')"><span class="chk"> </span>Night Shift</div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="legend">
       <div class="li"><div class="lb" style="background:rgba(180,178,169,0.6)"></div>Plan</div>
@@ -40,213 +131,460 @@
   </div>
 
   <div class="metrics">
-    <div class="mc"><div class="ml">Plan (week)</div><div class="mv">9,577</div></div>
-    <div class="mc"><div class="ml">Actual (week)</div><div class="mv">6,682</div></div>
-    <div class="mc"><div class="ml">%OA week</div><div class="mv" style="color:#BA7517">69.8%</div></div>
-    <div class="mc"><div class="ml">Avg Red Pts/shift</div><div class="mv" style="color:#D85A30">42.7</div></div>
+    <div class="mc"><div class="ml">Plan (week)</div><div class="mv" id="m-plan">—</div></div>
+    <div class="mc"><div class="ml">Actual (week)</div><div class="mv" id="m-actual">—</div></div>
+    <div class="mc"><div class="ml">%OA month</div><div class="mv" id="m-oa-month">—</div></div>
+    <div class="mc"><div class="ml">%OA week</div><div class="mv" id="m-oa">—</div></div>
+    <div class="mc">
+      <div class="ml">Red Points</div>
+      <div class="mc-red-rows">
+        <div class="mc-red-row">
+          <span class="mc-red-lbl">Total RED</span>
+          <span class="mc-red-num" id="m-red-total">—</span>
+        </div>
+        <div class="mc-red-row">
+          <span class="mc-red-lbl">Working days</span>
+          <span class="mc-red-num" id="m-red-days">—</span>
+        </div>
+        <hr class="mc-red-divider">
+        <div class="mc-red-result-row">
+          <span class="mc-red-eq">avg/day =</span>
+          <span class="mc-red-val" id="m-red">—</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="grid-outer">
-    <div class="axis-line" style="top:45px"><span class="axis-lbl">%OA</span><div class="axis-hr"></div></div>
+    <div class="axis-line" id="ax-top"></div>
     <div class="grid" id="grid"></div>
-    <div class="axis-line" style="top:354px"><span class="axis-lbl">pcs</span><div class="axis-hr"></div></div>
+    <div class="axis-line" id="ax-bot"><div class="axis-hr"></div></div>
+  </div>
+
+  <!-- PPAS Table -->
+  <div class="ppas-box">
+    <div class="ppas-box-hdr">PPAS</div>
+    <div class="ppas-wrap">
+      <table class="ppas-tbl" id="ppas-table"></table>
+    </div>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 const DAYS = [
-  {key:'SUN', label:'Sun', color:'#E24B4A'},   // สีแดง
-  {key:'MON', label:'Mon', color:'#F5C100'},   // สีเหลือง
-  {key:'TUE', label:'Tue', color:'#E879A0'},   // สีชมพู
-  {key:'WED', label:'Wed', color:'#1DB560'},   // สีเขียว
-  {key:'THU', label:'Thu', color:'#F97316'},   // สีส้ม
-  {key:'FRI', label:'Fri', color:'#378ADD'},   // สีฟ้า
-  {key:'SAT', label:'Sat', color:'#8B5CF6'},   // สีม่วง
+  {key:'SUN', label:'Sun', color:'#E24B4A'},
+  {key:'MON', label:'Mon', color:'#F5C100'},
+  {key:'TUE', label:'Tue', color:'#E879A0'},
+  {key:'WED', label:'Wed', color:'#1DB560'},
+  {key:'THU', label:'Thu', color:'#F97316'},
+  {key:'FRI', label:'Fri', color:'#378ADD'},
+  {key:'SAT', label:'Sat', color:'#8B5CF6'},
 ];
 
-const HOURS = ['07:30','08:30','09:40','10:30','12:10','13:30','14:40','15:30','16:50','17:50'];
-const PLAN  = [798,1129,755,1043,1230,988,601,910,755,1368];
-const T_HI  = 83;
-const T_LO  = 75;
-const MAX_PCS = Math.max(...PLAN) * 1.08;
+// Day shift 07:30–16:30 (10 slots, 1-hr interval)
+const DAY_HOURS = ['07:30','08:30','09:30','10:30','11:30','12:30','13:30','14:30','15:30','16:30'];
+const DAY_PLAN  = [798, 900, 850, 920, 880, 750, 820, 950, 800, 860];
 
-const OA = {
-  SUN:[75,83,78,79,54,69,70,73,78,72],
-  MON:[83,92,74,83,87,80,76,80,83,77],
-  TUE:[76,58,52,73,54,69,70,73,56,72],
-  WED:[83,83,74,87,80,82,76,80,83,77],
-  THU:[83,83,52,79,87,80,76,80,79,77],
-  FRI:[83,92,74,83,87,80,76,80,83,83],
-  SAT:[75,83,78,79,93,86,76,80,79,77],
+// Night shift 19:30–04:30 (10 slots, 1-hr interval; crosses midnight)
+const NIGHT_HOURS = ['19:30','20:30','21:30','22:30','23:30','00:30','01:30','02:30','03:30','04:30'];
+const NIGHT_PLAN  = [780, 850, 900, 820, 760, 840, 910, 870, 800, 720];
+
+const T_HI = 83, T_LO = 75;
+
+// ── PPAS slot definitions ────────────────────────────────────────────
+const PPAS_DAY_SLOTS = [
+  { time:'07:35 – 08:30', plan:3300 },
+  { time:'08:30 – 09:30', plan:3600 },
+  { time:'09:40 – 10:30', plan:3000 },
+  { time:'10:30 – 11:30', plan:3600 },
+  { time:'12:30 – 13:30', plan:3600 },
+  { time:'13:30 – 14:30', plan:3600 },
+  { time:'14:40 – 15:30', plan:3000 },
+  { time:'15:30 – 16:15', plan:2700 },
+  { time:'16:50 – 17:50', plan:3600 },
+  { time:'17:50 – 19:20', plan:5400 },
+];
+const PPAS_NIGHT_SLOTS = [
+  { time:'19:35 – 20:30', plan:3000 },
+  { time:'20:30 – 21:30', plan:3000 },
+  { time:'21:40 – 22:30', plan:3000 },
+  { time:'22:30 – 23:30', plan:3000 },
+  { time:'23:30 – 00:30', plan:3000 },
+  { time:'01:30 – 02:30', plan:3000 },
+  { time:'02:40 – 03:30', plan:3000 },
+  { time:'04:30 – 05:15', plan:3000 },
+  { time:'05:50 – 06:50', plan:3000 },
+  { time:'06:50 – 07:20', plan:3000 },
+];
+
+// Mock PPAS actual production per slot per day
+const PPAS_ACT_DAY = {
+  SUN: [2475,2700,2250,2520,1980,2520,2100,1890,2700,4050],
+  MON: [2970,3240,2550,3060,3060,3240,2550,2430,3060,4860],
+  TUE: [2310,2160,1800,2160,1980,2340,1950,1620,2160,3600],
+  WED: [2970,3060,2580,3240,3060,2880,2550,2430,3060,4860],
+  THU: [2970,3060,1800,2880,3060,2880,2280,2430,2880,4860],
+  FRI: [2970,3240,2550,3060,3060,2880,2400,2430,3060,4860],
+  SAT: [2475,2700,2340,2880,3240,3060,2280,2430,2880,4860],
+};
+const PPAS_ACT_NIGHT = {
+  SUN: [2160,2340,1950,2100,2040,2220,2040,2130,2280,2280],
+  MON: [2400,2550,2310,2460,2640,2370,2220,2430,2520,2280],
+  TUE: [2100,1950,1800,2160,2040,2250,2130,2070,1890,2100],
+  WED: [2460,2400,2280,2550,2370,2430,2310,2490,2400,2340],
+  THU: [2340,2400,1650,2280,2550,2370,2220,2400,2310,2250],
+  FRI: [2430,2640,2280,2460,2580,2370,2250,2460,2430,2460],
+  SAT: [2220,2460,2310,2400,2670,2550,2250,2430,2340,2280],
 };
 
-const grid = document.getElementById('grid');
+// Mock month %OA (March 2026) — per shift view
+const OA_MONTH = { all: 74.2, day: 75.8, night: 72.6 };
 
-// Plugin: target band + OA line on the RIGHT y-axis via canvas overlay
+function oaColor(v) {
+  return v >= T_LO && v <= T_HI ? '#1D9E75' : v >= 65 ? '#E24B4A' : '#E24B4A';
+}
+
+const OA_DAY = {
+  SUN: [75,83,78,79,54,69,70,73,78,72],
+  MON: [83,92,74,83,87,80,76,80,83,77],
+  TUE: [76,58,52,73,54,69,70,73,56,72],
+  WED: [83,83,74,87,80,82,76,80,83,77],
+  THU: [83,83,52,79,87,80,76,80,79,77],
+  FRI: [83,92,74,83,87,80,76,80,83,83],
+  SAT: [75,83,78,79,93,86,76,80,79,77],
+};
+
+const OA_NIGHT = {
+  SUN: [72,78,65,70,68,74,79,71,76,80],
+  MON: [80,85,77,82,88,79,74,81,84,76],
+  TUE: [70,65,60,72,68,75,71,69,63,70],
+  WED: [82,80,76,85,79,81,77,83,80,78],
+  THU: [78,80,55,76,85,79,74,80,77,75],
+  FRI: [81,88,76,82,86,79,75,82,81,82],
+  SAT: [74,82,77,80,89,85,75,81,78,76],
+};
+
+// ── Derive shift dataset ────────────────────────────────────────────
+function getShiftData(shiftKey, dayKey) {
+  if (shiftKey === 'day') {
+    return { hours: DAY_HOURS, plan: DAY_PLAN, oa: OA_DAY[dayKey] };
+  }
+  if (shiftKey === 'night') {
+    return { hours: NIGHT_HOURS, plan: NIGHT_PLAN, oa: OA_NIGHT[dayKey] };
+  }
+  // all = day + night combined
+  return {
+    hours: [...DAY_HOURS, ...NIGHT_HOURS],
+    plan:  [...DAY_PLAN,  ...NIGHT_PLAN],
+    oa:    [...OA_DAY[dayKey], ...OA_NIGHT[dayKey]],
+  };
+}
+
+// Row height per slot (fewer rows → taller, more rows → compact)
+function chartHeight(numRows) {
+  return numRows <= 10 ? numRows * 36 + 20 : numRows * 28 + 20;
+}
+
+// ── Dropdown ────────────────────────────────────────────────────────
+let currentShift = 'all';
+const SHIFT_LABELS = { all:'All Shift', day:'Day Shift', night:'Night Shift' };
+
+function toggleShiftMenu() {
+  document.getElementById('shift-menu').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.shift-wrap'))
+    document.getElementById('shift-menu').classList.remove('open');
+});
+
+function selectShift(val) {
+  currentShift = val;
+  document.getElementById('shift-label').textContent = SHIFT_LABELS[val];
+  document.querySelectorAll('.shift-item').forEach(el => {
+    el.querySelector('.chk').textContent = el.dataset.value === val ? '✓' : ' ';
+  });
+  document.getElementById('shift-menu').classList.remove('open');
+  applyFilter();
+}
+
+// ── Band plugin ─────────────────────────────────────────────────────
 const bandPlugin = {
-  id:'band',
+  id: 'band',
   beforeDatasetsDraw(chart) {
-    const {ctx, scales} = chart;
-    const xOA = scales['xOA'];
-    const yMain = scales['y'];
+    const { ctx, scales } = chart;
+    const xOA = scales['xOA'], yMain = scales['y'];
     if (!xOA || !yMain) return;
-
-    // Draw target band on the %OA axis so it aligns with the OA dots
-    const xHi = xOA.getPixelForValue(T_HI);
-    const xLo = xOA.getPixelForValue(T_LO);
-    const top  = yMain.top;
-    const bot  = yMain.bottom;
-
+    const xHi = xOA.getPixelForValue(T_HI), xLo = xOA.getPixelForValue(T_LO);
+    const top = yMain.top, bot = yMain.bottom;
     ctx.save();
     ctx.fillStyle = 'rgba(24,95,165,0.07)';
     ctx.fillRect(xLo, top, xHi - xLo, bot - top);
-    ctx.setLineDash([4,3]);
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = 'rgba(24,95,165,0.45)';
+    ctx.setLineDash([4,3]); ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(24,95,165,0.45)';
     ctx.beginPath(); ctx.moveTo(xHi, top); ctx.lineTo(xHi, bot); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(xLo, top); ctx.lineTo(xLo, bot); ctx.stroke();
     ctx.restore();
   }
 };
 
-DAYS.forEach((d, idx) => {
-  const oaArr   = OA[d.key];
-  const actual  = PLAN.map((p,i) => Math.round(p * oaArr[i] / 100));
-  const inRange = oaArr.map(v => v >= T_LO && v <= T_HI);
-  const avgOa   = Math.round(oaArr.reduce((a,b)=>a+b,0)/oaArr.length);
-  const avgOk   = avgOa >= T_LO && avgOa <= T_HI;
+// Plugin: draw a separator line between day/night when in All Shift view
+const sepPlugin = {
+  id: 'sep',
+  afterDatasetsDraw(chart) {
+    if (!chart._showSep) return;
+    const { ctx, scales } = chart;
+    const y = scales['y'];
+    if (!y) return;
+    // Separator between slot index 9 and 10
+    const y1 = y.getPixelForValue(DAY_HOURS[DAY_HOURS.length - 1]);
+    const y2 = y.getPixelForValue(NIGHT_HOURS[0]);
+    const sepY = (y1 + y2) / 2;
+    ctx.save();
+    ctx.setLineDash([3, 4]);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(148,163,184,0.45)';
+    ctx.beginPath();
+    ctx.moveTo(scales['y'].left, sepY);
+    ctx.lineTo(scales['xBar'].right, sepY);
+    ctx.stroke();
+    // Label
+    ctx.setLineDash([]);
+    ctx.fillStyle = 'rgba(148,163,184,0.7)';
+    ctx.font = '8px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('▼ Night', (scales['y'].left + scales['xBar'].right) / 2, sepY - 2);
+    ctx.restore();
+  }
+};
 
-  // Card
+// ── Build cards ─────────────────────────────────────────────────────
+const charts = {};
+const grid = document.getElementById('grid');
+
+DAYS.forEach((d, idx_d) => {
   const card = document.createElement('div');
   card.className = 'day-card';
-
   card.innerHTML = `
     <div class="day-header">
       <span class="day-name" style="color:${d.color}">${d.label}</span>
+      <span class="day-oa-val" id="oa-${d.key}">—</span>
     </div>
-    <div class="chart-wrap"><canvas id="c-${d.key}"></canvas></div>
+    <div class="chart-wrap" id="wrap-${d.key}"><canvas id="c-${d.key}"></canvas></div>
   `;
   grid.appendChild(card);
 
-  const canvas = card.querySelector(`#c-${d.key}`);
-
-  new Chart(canvas, {
-    plugins: [bandPlugin],
-    data: {
-      labels: HOURS,
-      datasets: [
-        // Horizontal bar — Plan (order:2 → renders before Actual → appears on top)
-        {
-          type: 'bar',
-          label: 'Plan',
-          data: PLAN,
-          backgroundColor: 'rgba(180,178,169,0.3)',
-          borderColor: 'rgba(180,178,169,0.5)',
-          borderWidth: 0.5,
-          borderRadius: 2,
-          xAxisID: 'xBar',
-          yAxisID: 'y',
-          order: 2,
-          barPercentage: 0.8,
-          categoryPercentage: 0.9,
-        },
-        // Horizontal bar — Actual (order:3 → renders after Plan → appears below)
-        {
-          type: 'bar',
-          label: 'Actual',
-          data: actual,
-          backgroundColor: inRange.map(ok => ok ? 'rgba(29,158,117,0.85)' : 'rgba(226,75,74,0.85)'),
-          borderRadius: 2,
-          xAxisID: 'xBar',
-          yAxisID: 'y',
-          order: 3,
-          barPercentage: 0.8,
-          categoryPercentage: 0.9,
-        },
-        // Line — %OA per hour
-        {
-          type: 'line',
-          label: '%OA',
-          data: oaArr,
-          borderColor: d.color,
-          borderWidth: 1.8,
-          pointRadius: oaArr.map(v => v >= T_LO && v <= T_HI ? 3 : 4),
-          pointBackgroundColor: oaArr.map(v => v >= T_LO && v <= T_HI ? '#378ADD' : '#E24B4A'),
-          pointBorderColor: oaArr.map(v => v >= T_LO && v <= T_HI ? '#378ADD' : '#E24B4A'),
-          tension: 0.35,
-          xAxisID: 'xOA',
-          yAxisID: 'yOA',
-          order: 1,
-        },
-      ]
-    },
+  // Build with placeholder data; applyFilter() will populate
+  charts[d.key] = new Chart(card.querySelector(`#c-${d.key}`), {
+    plugins: [bandPlugin, sepPlugin],
+    data: { labels: [], datasets: [
+      { type:'bar',  label:'Plan',   data:[], backgroundColor:'rgba(180,178,169,0.3)', borderColor:'rgba(180,178,169,0.5)', borderWidth:0.5, borderRadius:2, xAxisID:'xBar', yAxisID:'y', order:2, barPercentage:0.8, categoryPercentage:0.9 },
+      { type:'bar',  label:'Actual', data:[], backgroundColor:[], borderRadius:2, xAxisID:'xBar', yAxisID:'y', order:3, barPercentage:0.8, categoryPercentage:0.9 },
+      { type:'line', label:'%OA',    data:[], borderColor:d.color, borderWidth:1.8, pointRadius:[], pointBackgroundColor:[], pointBorderColor:[], tension:0.35, xAxisID:'xOA', yAxisID:'yOA', order:1 },
+    ]},
     options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: false,
+      indexAxis:'y', responsive:true, maintainAspectRatio:false, animation:false,
       plugins: {
-        legend: { display: false },
-        tooltip: {
-          mode: 'index',
-          callbacks: {
-            title: ctx => HOURS[ctx[0].dataIndex],
-            label: ctx => {
-              const i = ctx.dataIndex;
-              if (ctx.dataset.label === 'Plan')   return ` Plan: ${PLAN[i].toLocaleString()} pcs`;
-              if (ctx.dataset.label === 'Actual') return ` Actual: ${actual[i].toLocaleString()} pcs`;
-              if (ctx.dataset.label === '%OA')    return ` %OA: ${oaArr[i]}%${inRange[i]?' ✓':' ⚠'}`;
+        legend:{ display:false },
+        tooltip:{
+          mode:'index',
+          callbacks:{
+            title: ctx2 => ctx2[0]?.label ?? '',
+            label: ctx2 => {
+              if (ctx2.dataset.label==='Plan')   return ` Plan: ${ctx2.raw?.toLocaleString()} pcs`;
+              if (ctx2.dataset.label==='Actual') return ` Actual: ${ctx2.raw?.toLocaleString()} pcs`;
+              if (ctx2.dataset.label==='%OA')    return ` %OA: ${ctx2.raw}%`;
               return '';
             }
           }
         }
       },
       scales: {
-        // Shared Y (hours) — for bar datasets
         y: {
-          type: 'category',
-          labels: HOURS,
-          position: 'left',
-          ticks: { font:{size:8}, color:'#aaa', display: idx === 0 },
-          grid: { color:'rgba(128,128,128,0.08)', lineWidth:0.5 },
-          offset: true,
-          afterFit(scale) { scale.width = 34; },
+          type:'category', labels:[], position:'left',
+          ticks:{ font:{size:8}, color:'#aaa', display: idx_d === 0 },
+          grid:{ color:'rgba(128,128,128,0.08)', lineWidth:0.5 },
+          offset:true, afterFit(s){ s.width = 34; },
         },
-        // X for bars (pieces)
         xBar: {
-          type: 'linear',
-          position: 'bottom',
-          min: 0,
-          max: MAX_PCS,
-          ticks: { font:{size:8}, color:'#aaa', callback: v => (v===0||v===MAX_PCS) ? (v>=1000?(v/1000).toFixed(1)+'k':v) : null },
-          grid: { display: false },
-          title: { display: false },
+          type:'linear', position:'bottom', min:0, max:1,
+          ticks:{ font:{size:8}, color:'#aaa', callback: v => (v===0||v===1)?(v>=1000?(v/1000).toFixed(1)+'k':v):null },
+          grid:{ display:false },
         },
-        // X for OA line (0–100%)
         xOA: {
-          type: 'linear',
-          position: 'top',
-          min: 0,
-          max: 100,
-          ticks: {
-            font:{size:8}, color: d.color,
-            includeBounds: true,
-            callback: v => (v === 0 || v === 100) ? v+'%' : null,
-          },
-          grid: { display: false },
-          title: { display: false },
+          type:'linear', position:'top', min:0, max:100,
+          ticks:{ font:{size:8}, color:d.color, includeBounds:true, callback: v => (v===0||v===100)?v+'%':null },
+          grid:{ display:false },
         },
-        // Hidden Y axis for OA line (shares same category positions)
-        yOA: {
-          type: 'category',
-          labels: HOURS,
-          position: 'right',
-          display: false,
-          offset: true,
-        },
+        yOA: { type:'category', labels:[], position:'right', display:false, offset:true },
       }
     }
   });
 });
+
+// ── PPAS Table renderer ─────────────────────────────────────────────
+function renderPpasTable() {
+  const isAll   = currentShift === 'all';
+  const isNight = currentShift === 'night';
+  const slots   = isAll   ? [...PPAS_DAY_SLOTS, ...PPAS_NIGHT_SLOTS]
+                : isNight ? PPAS_NIGHT_SLOTS
+                :            PPAS_DAY_SLOTS;
+
+  const actByDay = key => isAll   ? [...PPAS_ACT_DAY[key], ...PPAS_ACT_NIGHT[key]]
+                        : isNight ? PPAS_ACT_NIGHT[key]
+                        :            PPAS_ACT_DAY[key];
+
+  // Dates for week 09/03–15/03/2026 (Sun–Sat)
+  const DATES = ['09/03','10/03','11/03','12/03','13/03','14/03','15/03'];
+  const totalCols = 2 + DAYS.length * 2;
+
+  // ── Header (2 rows) ──────────────────────────────────────────────
+  const hdr1 = DAYS.map((d, i) =>
+    `<th colspan="2" class="ppas-th-date" style="color:${d.color}">วันที่ ${DATES[i]}</th>`
+  ).join('');
+  const hdr2 = DAYS.map(d =>
+    `<th style="color:${d.color};font-size:10px;text-align:center;font-weight:600">${d.label}</th>
+     <th style="min-width:26px"></th>`
+  ).join('');
+
+  let html = `<thead>
+    <tr>
+      <th rowspan="2" class="ppas-td-time" style="text-align:left">เวลา</th>
+      <th rowspan="2" class="ppas-td-plan">PLAN<br><span style="font-weight:400;font-size:9px">100–90%</span></th>
+      ${hdr1}
+    </tr>
+    <tr>${hdr2}</tr>
+  </thead><tbody>`;
+
+  // ── Data rows ─────────────────────────────────────────────────────
+  slots.forEach((slot, i) => {
+    if (isAll && i === PPAS_DAY_SLOTS.length) {
+      html += `<tr class="ppas-tr-sep"><td colspan="${totalCols}">▼ Night Shift</td></tr>`;
+    }
+    const thr = slot.plan * 0.9;
+    const dayCells = DAYS.map(d => {
+      const v = actByDay(d.key)[i];
+      const color = v >= thr ? '#1D9E75' : '#E24B4A';
+      return `<td class="ppas-cell-diag">
+        <span class="ppas-act" style="color:${color}">${v.toLocaleString()}</span>
+        <span class="ppas-pln">${slot.plan.toLocaleString()}</span>
+      </td>
+      <td class="ppas-cell-sub"></td>`;
+    }).join('');
+    html += `<tr>
+      <td class="ppas-td-time">${slot.time}</td>
+      <td class="ppas-cell-diag ppas-td-plan">
+        <span class="ppas-pln">${slot.plan.toLocaleString()}</span>
+      </td>
+      ${dayCells}
+    </tr>`;
+  });
+
+  // ── TOTAL / DAY ───────────────────────────────────────────────────
+  const planTotal = slots.reduce((s, r) => s + r.plan, 0);
+  html += `<tr class="ppas-tr-total">
+    <td class="ppas-td-time">TOTAL / DAY</td>
+    <td class="ppas-cell-diag ppas-td-plan">
+      <span class="ppas-pln" style="font-weight:700;font-size:11px">${planTotal.toLocaleString()}</span>
+    </td>
+    ${DAYS.map(d => {
+      const tot = actByDay(d.key).slice(0, slots.length).reduce((s, v) => s + v, 0);
+      return `<td colspan="2">${tot.toLocaleString()}</td>`;
+    }).join('')}
+  </tr>`;
+
+  // ── Check ─────────────────────────────────────────────────────────
+  html += `<tr class="ppas-tr-check">
+    <td class="ppas-td-time">Check</td><td></td>
+    ${DAYS.map(() => '<td colspan="2">—</td>').join('')}
+  </tr></tbody>`;
+
+  document.getElementById('ppas-table').innerHTML = html;
+}
+
+// ── Apply filter ────────────────────────────────────────────────────
+function applyFilter() {
+  const isAll = currentShift === 'all';
+
+  // Compute max plan for xBar axis
+  const maxPlanDay   = Math.max(...DAY_PLAN);
+  const maxPlanNight = Math.max(...NIGHT_PLAN);
+  const rawMax = isAll ? Math.max(maxPlanDay, maxPlanNight)
+    : currentShift === 'day' ? maxPlanDay : maxPlanNight;
+  const maxPcs = Math.ceil(rawMax * 1.08 / 100) * 100; // round up to nearest 100 → clean tick
+
+  // Chart height
+  const numRows  = isAll ? 20 : 10;
+  const h = chartHeight(numRows);
+
+  // Update each day card
+  DAYS.forEach(d => {
+    const { hours, plan, oa } = getShiftData(currentShift, d.key);
+    // Daily %OA badge
+    const dayAvgOa = (oa.reduce((a,b)=>a+b,0) / oa.length);
+    const oaEl = document.getElementById('oa-' + d.key);
+    oaEl.textContent = dayAvgOa.toFixed(1) + '%';
+    oaEl.style.color = oaColor(dayAvgOa);
+    const actual  = plan.map((p, i) => Math.round(p * oa[i] / 100));
+    const inRange = oa.map(v => v >= T_LO && v <= T_HI);
+
+    const chart = charts[d.key];
+    chart._showSep = isAll;
+
+    chart.data.labels = hours;
+    chart.data.datasets[0].data = plan;
+    chart.data.datasets[1].data = actual;
+    chart.data.datasets[1].backgroundColor = inRange.map(ok => ok ? 'rgba(29,158,117,0.85)' : 'rgba(226,75,74,0.85)');
+    chart.data.datasets[2].data = oa;
+    chart.data.datasets[2].pointRadius          = oa.map(v => v >= T_LO && v <= T_HI ? 3 : 4);
+    chart.data.datasets[2].pointBackgroundColor = oa.map(v => v >= T_LO && v <= T_HI ? '#378ADD' : '#E24B4A');
+    chart.data.datasets[2].pointBorderColor     = oa.map(v => v >= T_LO && v <= T_HI ? '#378ADD' : '#E24B4A');
+
+    chart.options.scales.y.labels   = hours;
+    chart.options.scales.yOA.labels = hours;
+    chart.options.scales.xBar.max   = maxPcs;
+    chart.options.scales.xBar.ticks.callback = v => (v===0||v===maxPcs)?(maxPcs>=1000?(v/1000).toFixed(1)+'k':v):null;
+
+    document.getElementById('wrap-' + d.key).style.height = h + 'px';
+    chart.update();
+  });
+
+  // Axis label position
+  document.getElementById('ax-top').style.top = '45px';
+  document.getElementById('ax-bot').style.top = (h + 50) + 'px';
+
+  // Metrics — aggregate 7 days
+  let tPlan = 0, tActual = 0, tOa = 0, redPts = 0;
+  const sampleData = getShiftData(currentShift, 'MON'); // just to get length
+  DAYS.forEach(d => {
+    const { plan, oa } = getShiftData(currentShift, d.key);
+    plan.forEach((p, i) => {
+      tPlan   += p;
+      tActual += Math.round(p * oa[i] / 100);
+      tOa     += oa[i];
+      if (oa[i] < T_LO || oa[i] > T_HI) redPts++;
+    });
+  });
+  const rows = DAYS.length * sampleData.plan.length;
+  const weekOa  = (tOa / rows).toFixed(1);
+  const workDays = DAYS.length;                          // 7 days in this week
+  const avgRed  = (redPts / workDays).toFixed(1);
+
+  const monthOa = OA_MONTH[currentShift].toFixed(1);
+
+  document.getElementById('m-plan').textContent        = tPlan.toLocaleString();
+  document.getElementById('m-actual').textContent      = tActual.toLocaleString();
+  document.getElementById('m-oa-month').textContent    = monthOa + '%';
+  document.getElementById('m-oa-month').style.color    = oaColor(+monthOa);
+  document.getElementById('m-oa').textContent          = weekOa + '%';
+  document.getElementById('m-oa').style.color          = oaColor(+weekOa);
+  document.getElementById('m-red-total').textContent   = redPts;
+  document.getElementById('m-red-days').textContent    = workDays;
+  document.getElementById('m-red').textContent         = avgRed;
+  document.getElementById('m-red').style.color         = '#D85A30';
+
+  renderPpasTable();
+}
+
+// Initial render
+applyFilter();
 </script>
