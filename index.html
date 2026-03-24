@@ -69,14 +69,15 @@
 
 /* ── PPAS Table ── */
 .ppas-box { margin-top:30px; border:1px solid var(--color-border-tertiary,#d1d5db); border-radius:8px; overflow:hidden; }
-.ppas-box-hdr { padding:7px 12px; font-size:12px; font-weight:600; color:var(--color-text-primary); background:var(--color-background-secondary); border-bottom:1px solid var(--color-border-tertiary,#d1d5db); letter-spacing:.3px; text-align: center;}
+.ppas-box-hdr { padding:7px 12px; font-size:15px; font-weight:600; color:var(--color-text-primary); background:var(--color-background-secondary); border-bottom:1px solid var(--color-border-tertiary,#d1d5db); letter-spacing:.3px; text-align: center;}
 .ppas-wrap { overflow-x:auto; }
 .ppas-tbl { width:100%; border-collapse:collapse; font-size:11px; }
 .ppas-tbl th, .ppas-tbl td { border:0.5px solid var(--color-border-tertiary,#d1d5db); padding:4px 6px; white-space:nowrap; }
 .ppas-tbl th { background:var(--color-background-secondary); font-weight:600; text-align:center; font-size:11px; }
-.ppas-td-time { text-align:left; font-size:10px; color:var(--color-text-primary); min-width:104px; }
-.ppas-td-plan { text-align:center; font-size:10px; color:var(--color-text-secondary); min-width:56px; }
-.ppas-th-date { text-align:center; font-size:10px; font-weight:500; }
+.ppas-td-time { text-align:left; font-size:13px; color:var(--color-text-primary); min-width:110px; }
+.ppas-secs { font-size:11px; color:var(--color-text-secondary); margin-top:1px; }
+.ppas-td-plan { text-align:center; font-size:11px; color:var(--color-text-secondary); min-width:56px; }
+.ppas-th-date { text-align:center; font-size:11px; font-weight:500; }
 /* Diagonal data cell */
 .ppas-cell-diag {
   position:relative; min-width:58px; min-height:38px;
@@ -92,13 +93,12 @@
     transparent calc(50% + 0.5px)
   );
 }
-.ppas-act  { position:absolute; top:3px; left:4px; font-size:10px; font-weight:600; z-index:1; }
-.ppas-pln  { position:absolute; bottom:3px; right:4px; font-size:9px; color:var(--color-text-secondary); z-index:1; }
+.ppas-act  { position:absolute; top:3px; left:4px; font-size:13px; font-weight:600; z-index:1; }
+.ppas-pln  { position:absolute; bottom:3px; right:4px; font-size:12px; color:var(--color-text-secondary); z-index:1; }
 /* Dashed sub-column (right half of each day) */
-.ppas-cell-sub { min-width:26px; border-left:1px dashed var(--color-border-tertiary,#d1d5db) !important; }
-.ppas-tr-sep td { background:rgba(148,163,184,0.08); font-size:9px; color:#94A3B8; text-align:center; padding:2px; font-style:italic; border-color:rgba(148,163,184,0.3); }
-.ppas-tr-total td { font-weight:700; background:var(--color-background-secondary); font-size:11px; text-align:center; }
-.ppas-tr-check td { font-size:10px; color:var(--color-text-secondary); text-align:center; background:var(--color-background-secondary); }
+.ppas-cell-sub { min-width:36px; border-left:1px dashed var(--color-border-tertiary,#d1d5db) !important; text-align:center; vertical-align:middle; font-size:12px; font-weight:600; }
+.ppas-tr-sep td { background:rgba(148,163,184,0.08); font-size:11px; color:#94A3B8; text-align:center; padding:2px; font-style:italic; border-color:rgba(148,163,184,0.3); }
+.ppas-tr-total td { font-weight:700; background:var(--color-background-secondary); font-size:13px; text-align:center; }
 </style>
 
 <div class="wrap">
@@ -183,102 +183,82 @@ const DAYS = [
 ];
 
 // Day shift 07:30–16:30 (10 slots, 1-hr interval)
-const DAY_HOURS = ['07:30','08:30','09:30','10:30','11:30','12:30','13:30','14:30','15:30','16:30'];
+const DAY_HOURS = ['07:30','08:30','09:40','10:30','12:30','13:30','14:40','15:30','16:50','17:30'];
 const DAY_PLAN  = [798, 900, 850, 920, 880, 750, 820, 950, 800, 860];
 
 // Night shift 19:30–04:30 (10 slots, 1-hr interval; crosses midnight)
-const NIGHT_HOURS = ['19:30','20:30','21:30','22:30','23:30','00:30','01:30','02:30','03:30','04:30'];
+const NIGHT_HOURS = ['19:35','20:30','21:40','22:30','23:30','01:30','02:40','04:30','05:30','06:30'];
 const NIGHT_PLAN  = [780, 850, 900, 820, 760, 840, 910, 870, 800, 720];
 
-const T_HI = 83, T_LO = 75;
+const T_HI = 100, T_LO = 90;
 
 // ── PPAS slot definitions ────────────────────────────────────────────
 const PPAS_DAY_SLOTS = [
-  { time:'07:35 – 08:30', plan:3300 },
-  { time:'08:30 – 09:30', plan:3600 },
-  { time:'09:40 – 10:30', plan:3000 },
-  { time:'10:30 – 11:30', plan:3600 },
-  { time:'12:30 – 13:30', plan:3600 },
-  { time:'13:30 – 14:30', plan:3600 },
-  { time:'14:40 – 15:30', plan:3000 },
-  { time:'15:30 – 16:15', plan:2700 },
-  { time:'16:50 – 17:50', plan:3600 },
-  { time:'17:50 – 19:20', plan:5400 },
+  { time:'07:35 – 08:30', plan:798 },
+  { time:'08:30 – 09:30', plan:900 },
+  { time:'09:40 – 10:30', plan:850 },
+  { time:'10:30 – 11:30', plan:920 },
+  { time:'12:30 – 13:30', plan:880 },
+  { time:'13:30 – 14:30', plan:750 },
+  { time:'14:40 – 15:30', plan:820 },
+  { time:'15:30 – 16:15', plan:950 },
+  { time:'16:50 – 17:50', plan:800 },
+  { time:'17:50 – 19:20', plan:860 },
 ];
 const PPAS_NIGHT_SLOTS = [
-  { time:'19:35 – 20:30', plan:3000 },
-  { time:'20:30 – 21:30', plan:3000 },
-  { time:'21:40 – 22:30', plan:3000 },
-  { time:'22:30 – 23:30', plan:3000 },
-  { time:'23:30 – 00:30', plan:3000 },
-  { time:'01:30 – 02:30', plan:3000 },
-  { time:'02:40 – 03:30', plan:3000 },
-  { time:'04:30 – 05:15', plan:3000 },
-  { time:'05:50 – 06:50', plan:3000 },
-  { time:'06:50 – 07:20', plan:3000 },
+  { time:'19:35 – 20:30', plan:780 },
+  { time:'20:30 – 21:30', plan:850 },
+  { time:'21:40 – 22:30', plan:900 },
+  { time:'22:30 – 23:30', plan:820 },
+  { time:'23:30 – 00:30', plan:760 },
+  { time:'01:30 – 02:30', plan:840 },
+  { time:'02:40 – 03:30', plan:910 },
+  { time:'04:30 – 05:15', plan:870 },
+  { time:'05:50 – 06:50', plan:800 },
+  { time:'06:50 – 07:20', plan:720 },
 ];
 
 // Mock PPAS actual production per slot per day
 const PPAS_ACT_DAY = {
-  SUN: [2475,2700,2250,2520,1980,2520,2100,1890,2700,4050],
-  MON: [2970,3240,2550,3060,3060,3240,2550,2430,3060,4860],
-  TUE: [2310,2160,1800,2160,1980,2340,1950,1620,2160,3600],
-  WED: [2970,3060,2580,3240,3060,2880,2550,2430,3060,4860],
-  THU: [2970,3060,1800,2880,3060,2880,2280,2430,2880,4860],
-  FRI: [2970,3240,2550,3060,3060,2880,2400,2430,3060,4860],
-  SAT: [2475,2700,2340,2880,3240,3060,2280,2430,2880,4860],
+  SUN: [775,700,750,720,880,720,700,890,700,750],
+  MON: [770,740,750,760,760,740,750,730,760,760],
+  TUE: [710,760,700,760,780,740,750,620,760,600],
+  WED: [770,760,680,740,760,780,670,730,760,760],
+  THU: [770,760,700,780,760,780,780,730,780,760],
+  FRI: [770,740,650,760,760,780,700,730,760,760],
+  SAT: [775,700,740,780,740,660,780,730,780,760],
 };
 const PPAS_ACT_NIGHT = {
-  SUN: [2160,2340,1950,2100,2040,2220,2040,2130,2280,2280],
-  MON: [2400,2550,2310,2460,2640,2370,2220,2430,2520,2280],
-  TUE: [2100,1950,1800,2160,2040,2250,2130,2070,1890,2100],
-  WED: [2460,2400,2280,2550,2370,2430,2310,2490,2400,2340],
-  THU: [2340,2400,1650,2280,2550,2370,2220,2400,2310,2250],
-  FRI: [2430,2640,2280,2460,2580,2370,2250,2460,2430,2460],
-  SAT: [2220,2460,2310,2400,2670,2550,2250,2430,2340,2280],
+  SUN: [760,740,750,700,740,720,740,730,780,780],
+  MON: [700,750,710,760,740,770,720,730,720,680],
+  TUE: [700,750,700,760,740,750,730,770,790,700],
+  WED: [760,700,780,750,770,730,710,790,700,740],
+  THU: [740,700,650,780,750,770,720,700,710,650],
+  FRI: [730,740,780,760,780,770,750,760,730,660],
+  SAT: [720,760,710,700,670,750,750,730,740,680],
 };
 
 // Mock month %OA (March 2026) — per shift view
 const OA_MONTH = { all: 74.2, day: 75.8, night: 72.6 };
 
 function oaColor(v) {
-  return v >= T_LO && v <= T_HI ? '#1D9E75' : v >= 65 ? '#E24B4A' : '#E24B4A';
+  return v >= T_LO ? '#1D9E75' : '#E24B4A';
 }
-
-const OA_DAY = {
-  SUN: [75,83,78,79,54,69,70,73,78,72],
-  MON: [83,92,74,83,87,80,76,80,83,77],
-  TUE: [76,58,52,73,54,69,70,73,56,72],
-  WED: [83,83,74,87,80,82,76,80,83,77],
-  THU: [83,83,52,79,87,80,76,80,79,77],
-  FRI: [83,92,74,83,87,80,76,80,83,83],
-  SAT: [75,83,78,79,93,86,76,80,79,77],
-};
-
-const OA_NIGHT = {
-  SUN: [72,78,65,70,68,74,79,71,76,80],
-  MON: [80,85,77,82,88,79,74,81,84,76],
-  TUE: [70,65,60,72,68,75,71,69,63,70],
-  WED: [82,80,76,85,79,81,77,83,80,78],
-  THU: [78,80,55,76,85,79,74,80,77,75],
-  FRI: [81,88,76,82,86,79,75,82,81,82],
-  SAT: [74,82,77,80,89,85,75,81,78,76],
-};
 
 // ── Derive shift dataset ────────────────────────────────────────────
 function getShiftData(shiftKey, dayKey) {
   if (shiftKey === 'day') {
-    return { hours: DAY_HOURS, plan: DAY_PLAN, oa: OA_DAY[dayKey] };
+    const oa = PPAS_ACT_DAY[dayKey].map((a, i) => Math.round(a / DAY_PLAN[i] * 100));
+    return { hours: DAY_HOURS, plan: DAY_PLAN, oa };
   }
   if (shiftKey === 'night') {
-    return { hours: NIGHT_HOURS, plan: NIGHT_PLAN, oa: OA_NIGHT[dayKey] };
+    const oa = PPAS_ACT_NIGHT[dayKey].map((a, i) => Math.round(a / NIGHT_PLAN[i] * 100));
+    return { hours: NIGHT_HOURS, plan: NIGHT_PLAN, oa };
   }
-  // all = day + night combined
-  return {
-    hours: [...DAY_HOURS, ...NIGHT_HOURS],
-    plan:  [...DAY_PLAN,  ...NIGHT_PLAN],
-    oa:    [...OA_DAY[dayKey], ...OA_NIGHT[dayKey]],
-  };
+  const actAll  = [...PPAS_ACT_DAY[dayKey], ...PPAS_ACT_NIGHT[dayKey]];
+  const planAll = [...DAY_PLAN, ...NIGHT_PLAN];
+  const oa = actAll.map((a, i) => Math.round(a / planAll[i] * 100));
+  return { hours: [...DAY_HOURS, ...NIGHT_HOURS], plan: planAll, oa };
 }
 
 // Row height per slot (fewer rows → taller, more rows → compact)
@@ -315,14 +295,13 @@ const bandPlugin = {
     const { ctx, scales } = chart;
     const xOA = scales['xOA'], yMain = scales['y'];
     if (!xOA || !yMain) return;
-    const xHi = xOA.getPixelForValue(T_HI), xLo = xOA.getPixelForValue(T_LO);
+    const xTarget = xOA.getPixelForValue(T_LO);
     const top = yMain.top, bot = yMain.bottom;
     ctx.save();
     ctx.fillStyle = 'rgba(24,95,165,0.07)';
-    ctx.fillRect(xLo, top, xHi - xLo, bot - top);
-    ctx.setLineDash([4,3]); ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(24,95,165,0.45)';
-    ctx.beginPath(); ctx.moveTo(xHi, top); ctx.lineTo(xHi, bot); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(xLo, top); ctx.lineTo(xLo, bot); ctx.stroke();
+    ctx.fillRect(xTarget, top, xOA.right - xTarget, bot - top);
+    ctx.setLineDash([4,3]); ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(24,95,165,0.55)';
+    ctx.beginPath(); ctx.moveTo(xTarget, top); ctx.lineTo(xTarget, bot); ctx.stroke();
     ctx.restore();
   }
 };
@@ -421,6 +400,16 @@ DAYS.forEach((d, idx_d) => {
   });
 });
 
+// ── Parse "HH:MM – HH:MM" → duration in seconds ─────────────────────
+function calcSeconds(timeStr) {
+  const [t1, t2] = timeStr.split('–').map(s => s.trim());
+  const [h1, m1] = t1.split(':').map(Number);
+  const [h2, m2] = t2.split(':').map(Number);
+  let mins = (h2 * 60 + m2) - (h1 * 60 + m1);
+  if (mins < 0) mins += 24 * 60;   // กรณีข้ามเที่ยงคืน
+  return mins * 60;
+}
+
 // ── PPAS Table renderer ─────────────────────────────────────────────
 function renderPpasTable() {
   const isAll   = currentShift === 'all';
@@ -443,7 +432,7 @@ function renderPpasTable() {
   ).join('');
   const hdr2 = DAYS.map(d =>
     `<th style="color:${d.color};font-size:10px;text-align:center;font-weight:600">${d.label}</th>
-     <th style="min-width:26px"></th>`
+     <th style="min-width:26px;font-size:10px;text-align:center;color:${d.color}">%OA</th>`
   ).join('');
 
   let html = `<thead>
@@ -460,21 +449,23 @@ function renderPpasTable() {
     if (isAll && i === PPAS_DAY_SLOTS.length) {
       html += `<tr class="ppas-tr-sep"><td colspan="${totalCols}">▼ Night Shift</td></tr>`;
     }
-    const thr = slot.plan * 0.9;
     const dayCells = DAYS.map(d => {
       const v = actByDay(d.key)[i];
-      const color = v >= thr ? '#1D9E75' : '#E24B4A';
+      const slotOa = v / slot.plan * 100;
+      const color = slotOa >= T_LO ? '#1D9E75' : '#E24B4A';
       return `<td class="ppas-cell-diag">
         <span class="ppas-act" style="color:${color}">${v.toLocaleString()}</span>
         <span class="ppas-pln">${slot.plan.toLocaleString()}</span>
       </td>
-      <td class="ppas-cell-sub"></td>`;
+      <td class="ppas-cell-sub" style="color:${color}">${slotOa.toFixed(1)}%</td>`;
     }).join('');
+    const secs = calcSeconds(slot.time);
     html += `<tr>
-      <td class="ppas-td-time">${slot.time}</td>
-      <td class="ppas-cell-diag ppas-td-plan">
-        <span class="ppas-pln">${slot.plan.toLocaleString()}</span>
+      <td class="ppas-td-time">
+        ${slot.time}
+        <div class="ppas-secs">${secs.toLocaleString()} sec</div>
       </td>
+      <td class="ppas-cell-diag ppas-td-plan"></td>
       ${dayCells}
     </tr>`;
   });
@@ -483,22 +474,23 @@ function renderPpasTable() {
   const planTotal = slots.reduce((s, r) => s + r.plan, 0);
   html += `<tr class="ppas-tr-total">
     <td class="ppas-td-time">TOTAL / DAY</td>
-    <td class="ppas-cell-diag ppas-td-plan">
-      <span class="ppas-pln" style="font-weight:700;font-size:11px">${planTotal.toLocaleString()}</span>
-    </td>
+    <td class="ppas-cell-diag ppas-td-plan"></td>
     ${DAYS.map(d => {
       const tot = actByDay(d.key).slice(0, slots.length).reduce((s, v) => s + v, 0);
-      return `<td colspan="2">${tot.toLocaleString()}</td>`;
+      const totOa = tot / planTotal * 100;
+      const totColor = totOa >= T_LO ? '#1D9E75' : '#E24B4A';
+      return `<td>${tot.toLocaleString()}</td>
+              <td style="color:${totColor};font-size:12px;font-weight:700;text-align:center">${totOa.toFixed(1)}%</td>`;
     }).join('')}
   </tr>`;
 
-  // ── Check ─────────────────────────────────────────────────────────
-  html += `<tr class="ppas-tr-check">
-    <td class="ppas-td-time">Check</td><td></td>
-    ${DAYS.map(() => '<td colspan="2">—</td>').join('')}
-  </tr></tbody>`;
-
   document.getElementById('ppas-table').innerHTML = html;
+}
+
+function getActualData(shiftKey, dayKey) {
+  if (shiftKey === 'day')   return PPAS_ACT_DAY[dayKey];
+  if (shiftKey === 'night') return PPAS_ACT_NIGHT[dayKey];
+  return [...PPAS_ACT_DAY[dayKey], ...PPAS_ACT_NIGHT[dayKey]];
 }
 
 // ── Apply filter ────────────────────────────────────────────────────
@@ -519,13 +511,13 @@ function applyFilter() {
   // Update each day card
   DAYS.forEach(d => {
     const { hours, plan, oa } = getShiftData(currentShift, d.key);
-    // Daily %OA badge
-    const dayAvgOa = (oa.reduce((a,b)=>a+b,0) / oa.length);
+    const actual = getActualData(currentShift, d.key);
+    // Daily %OA badge — weighted: sum(actual) / sum(plan)
+    const dayAvgOa = actual.reduce((a,b)=>a+b,0) / plan.reduce((a,b)=>a+b,0) * 100;
     const oaEl = document.getElementById('oa-' + d.key);
     oaEl.textContent = dayAvgOa.toFixed(1) + '%';
     oaEl.style.color = oaColor(dayAvgOa);
-    const actual  = plan.map((p, i) => Math.round(p * oa[i] / 100));
-    const inRange = oa.map(v => v >= T_LO && v <= T_HI);
+    const inRange = oa.map(v => v >= T_LO);
 
     const chart = charts[d.key];
     chart._showSep = isAll;
@@ -535,9 +527,9 @@ function applyFilter() {
     chart.data.datasets[1].data = actual;
     chart.data.datasets[1].backgroundColor = inRange.map(ok => ok ? 'rgba(29,158,117,0.85)' : 'rgba(226,75,74,0.85)');
     chart.data.datasets[2].data = oa;
-    chart.data.datasets[2].pointRadius          = oa.map(v => v >= T_LO && v <= T_HI ? 3 : 4);
-    chart.data.datasets[2].pointBackgroundColor = oa.map(v => v >= T_LO && v <= T_HI ? '#378ADD' : '#E24B4A');
-    chart.data.datasets[2].pointBorderColor     = oa.map(v => v >= T_LO && v <= T_HI ? '#378ADD' : '#E24B4A');
+    chart.data.datasets[2].pointRadius          = oa.map(v => v >= T_LO ? 3 : 4);
+    chart.data.datasets[2].pointBackgroundColor = oa.map(v => v >= T_LO ? '#378ADD' : '#E24B4A');
+    chart.data.datasets[2].pointBorderColor     = oa.map(v => v >= T_LO ? '#378ADD' : '#E24B4A');
 
     chart.options.scales.y.labels   = hours;
     chart.options.scales.yOA.labels = hours;
@@ -561,25 +553,24 @@ function applyFilter() {
       tPlan   += p;
       tActual += Math.round(p * oa[i] / 100);
       tOa     += oa[i];
-      if (oa[i] < T_LO || oa[i] > T_HI) redPts++;
+      if (oa[i] < T_LO) redPts++;
     });
   });
-  const rows = DAYS.length * sampleData.plan.length;
-  const weekOa  = (tOa / rows).toFixed(1);
+  const weekOa  = (tActual / tPlan * 100).toFixed(1);
   const workDays = DAYS.length;                          // 7 days in this week
   const avgRed  = (redPts / workDays).toFixed(1);
 
   const monthOa = OA_MONTH[currentShift].toFixed(1);
 
-  document.getElementById('m-plan').textContent        = tPlan.toLocaleString();
-  document.getElementById('m-actual').textContent      = tActual.toLocaleString();
+  document.getElementById('m-plan').textContent        = tPlan.toLocaleString() + ' pcs.';
+  document.getElementById('m-actual').textContent      = tActual.toLocaleString() + ' pcs.';
   document.getElementById('m-oa-month').textContent    = monthOa + '%';
   document.getElementById('m-oa-month').style.color    = oaColor(+monthOa);
   document.getElementById('m-oa').textContent          = weekOa + '%';
   document.getElementById('m-oa').style.color          = oaColor(+weekOa);
-  document.getElementById('m-red-total').textContent   = redPts;
-  document.getElementById('m-red-days').textContent    = workDays;
-  document.getElementById('m-red').textContent         = avgRed;
+  document.getElementById('m-red-total').textContent   = redPts + ' times';
+  document.getElementById('m-red-days').textContent    = workDays + ' days';
+  document.getElementById('m-red').textContent         = avgRed + ' times/day';
   document.getElementById('m-red').style.color         = '#D85A30';
 
   renderPpasTable();
