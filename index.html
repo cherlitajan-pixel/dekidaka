@@ -74,9 +74,9 @@
 .ppas-tbl { width:100%; border-collapse:collapse; font-size:11px; }
 .ppas-tbl th, .ppas-tbl td { border:0.5px solid var(--color-border-tertiary,#d1d5db); padding:4px 6px; white-space:nowrap; }
 .ppas-tbl th { background:var(--color-background-secondary); font-weight:600; text-align:center; font-size:11px; }
-.ppas-td-time { text-align:left; font-size:13px; color:var(--color-text-primary); min-width:110px; }
+.ppas-td-time { text-align:left; font-size:13px; color:var(--color-text-primary); width:110px; }
 .ppas-secs { font-size:11px; color:var(--color-text-secondary); margin-top:1px; }
-.ppas-td-plan { text-align:center; font-size:11px; color:var(--color-text-secondary); min-width:56px; }
+.ppas-td-plan { text-align:center; font-size:11px; color:var(--color-text-secondary); min-width:90px; }
 .ppas-th-date { text-align:center; font-size:11px; font-weight:500; }
 /* Diagonal data cell */
 .ppas-cell-diag {
@@ -98,7 +98,7 @@
 /* Dashed sub-column (right half of each day) */
 .ppas-cell-sub { min-width:36px; border-left:1px dashed var(--color-border-tertiary,#d1d5db) !important; text-align:center; vertical-align:middle; font-size:12px; font-weight:600; }
 .ppas-tr-sep td { background:rgba(148,163,184,0.08); font-size:11px; color:#94A3B8; text-align:center; padding:2px; font-style:italic; border-color:rgba(148,163,184,0.3); }
-.ppas-tr-total td { font-weight:700; background:var(--color-background-secondary); font-size:13px; text-align:center; }
+.ppas-tr-total td { font-weight:700; background:var(--color-background-secondary); font-size:13px; text-align:center; height:55px; }
 </style>
 
 <div class="wrap">
@@ -171,7 +171,9 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 <script>
+Chart.register(ChartDataLabels);
 const DAYS = [
   {key:'SUN', label:'Sun', color:'#E24B4A'},
   {key:'MON', label:'Mon', color:'#F5C100'},
@@ -191,6 +193,7 @@ const NIGHT_HOURS = ['19:35','20:30','21:40','22:30','23:30','01:30','02:40','04
 const NIGHT_PLAN  = [780, 850, 900, 820, 760, 840, 910, 870, 800, 720];
 
 const T_HI = 100, T_LO = 90;
+const CT = 4; // Cycle time in seconds
 
 // ── PPAS slot definitions ────────────────────────────────────────────
 const PPAS_DAY_SLOTS = [
@@ -223,18 +226,18 @@ const PPAS_ACT_DAY = {
   SUN: [775,700,750,720,880,720,700,890,700,750],
   MON: [770,740,750,760,760,740,750,730,760,760],
   TUE: [710,760,700,760,780,740,750,620,760,600],
-  WED: [770,760,680,740,760,780,670,730,760,760],
-  THU: [770,760,700,780,760,780,780,730,780,760],
-  FRI: [770,740,650,760,760,780,700,730,760,760],
+  WED: [770,760,680,740,760,680,670,730,760,760],
+  THU: [770,760,700,780,760,680,780,730,780,760],
+  FRI: [770,740,650,760,760,680,700,730,760,760],
   SAT: [775,700,740,780,740,660,780,730,780,760],
 };
 const PPAS_ACT_NIGHT = {
-  SUN: [760,740,750,700,740,720,740,730,780,780],
+  SUN: [760,740,750,700,740,720,740,730,780,680],
   MON: [700,750,710,760,740,770,720,730,720,680],
   TUE: [700,750,700,760,740,750,730,770,790,700],
-  WED: [760,700,780,750,770,730,710,790,700,740],
+  WED: [760,700,780,750,770,730,710,790,700,640],
   THU: [740,700,650,780,750,770,720,700,710,650],
-  FRI: [730,740,780,760,780,770,750,760,730,660],
+  FRI: [730,740,680,760,680,770,750,760,730,660],
   SAT: [720,760,710,700,670,750,750,730,740,680],
 };
 
@@ -295,13 +298,31 @@ const bandPlugin = {
     const { ctx, scales } = chart;
     const xOA = scales['xOA'], yMain = scales['y'];
     if (!xOA || !yMain) return;
-    const xTarget = xOA.getPixelForValue(T_LO);
+    const xLo = xOA.getPixelForValue(T_LO);
+    const xHi = xOA.getPixelForValue(100);
     const top = yMain.top, bot = yMain.bottom;
     ctx.save();
     ctx.fillStyle = 'rgba(24,95,165,0.07)';
-    ctx.fillRect(xTarget, top, xOA.right - xTarget, bot - top);
+    ctx.fillRect(xLo, top, xHi - xLo, bot - top);
     ctx.setLineDash([4,3]); ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(24,95,165,0.55)';
-    ctx.beginPath(); ctx.moveTo(xTarget, top); ctx.lineTo(xTarget, bot); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xLo, top); ctx.lineTo(xLo, bot); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xHi, top); ctx.lineTo(xHi, bot); ctx.stroke();
+    ctx.restore();
+  },
+  afterDraw(chart) {
+    const { ctx, scales } = chart;
+    const xOA = scales['xOA'], yMain = scales['y'];
+    if (!xOA || !yMain) return;
+    const xLo = xOA.getPixelForValue(T_LO);
+    const xHi = xOA.getPixelForValue(100);
+    const labelY = yMain.top - 2;
+    ctx.save();
+    ctx.font = '7px sans-serif';
+    ctx.fillStyle = 'rgba(24,95,165,0.8)';
+    ctx.textAlign = 'right';
+    ctx.fillText('90%', xLo - 2, labelY);
+    ctx.textAlign = 'left';
+    ctx.fillText('100%', xHi + 2, labelY);
     ctx.restore();
   }
 };
@@ -375,8 +396,18 @@ DAYS.forEach((d, idx_d) => {
               return '';
             }
           }
-        }
+        },
+        datalabels: {
+          display: ctx => ctx.dataset.label === '%OA',
+          formatter: v => typeof v === 'number' ? v.toFixed(1)+'%' : v+'%',
+          font: { size: 7 },
+          color: ctx => ctx.dataset.pointBackgroundColor?.[ctx.dataIndex] ?? '#aaa',
+          anchor: 'end',
+          align: 'right',
+          offset: 2,
+        },
       },
+    
       scales: {
         y: {
           type:'category', labels:[], position:'left',
@@ -386,12 +417,12 @@ DAYS.forEach((d, idx_d) => {
         },
         xBar: {
           type:'linear', position:'bottom', min:0, max:1,
-          ticks:{ font:{size:8}, color:'#aaa', callback: v => (v===0||v===1)?(v>=1000?(v/1000).toFixed(1)+'k':v):null },
+          ticks:{ display:false },
           grid:{ display:false },
         },
         xOA: {
-          type:'linear', position:'top', min:0, max:100,
-          ticks:{ font:{size:8}, color:d.color, includeBounds:true, callback: v => (v===0||v===100)?v+'%':null },
+          type:'linear', position:'top', min:0, max:120,
+          ticks:{ display:false },
           grid:{ display:false },
         },
         yOA: { type:'category', labels:[], position:'right', display:false, offset:true },
@@ -445,27 +476,40 @@ function renderPpasTable() {
   </thead><tbody>`;
 
   // ── Data rows ─────────────────────────────────────────────────────
+  let accumTheo = 0, accumPlan = 0;
+  const accumAct = {};
+  DAYS.forEach(d => { accumAct[d.key] = 0; });
+
   slots.forEach((slot, i) => {
     if (isAll && i === PPAS_DAY_SLOTS.length) {
       html += `<tr class="ppas-tr-sep"><td colspan="${totalCols}">▼ Night Shift</td></tr>`;
     }
+    const secs = calcSeconds(slot.time);
+    const theoretical = Math.round(secs / CT);
+    const slotPlan90 = Math.round(theoretical * 0.9);
+    accumTheo += theoretical;
+    accumPlan += slotPlan90;
+
     const dayCells = DAYS.map(d => {
       const v = actByDay(d.key)[i];
+      accumAct[d.key] += v;
       const slotOa = v / slot.plan * 100;
       const color = slotOa >= T_LO ? '#1D9E75' : '#E24B4A';
       return `<td class="ppas-cell-diag">
         <span class="ppas-act" style="color:${color}">${v.toLocaleString()}</span>
-        <span class="ppas-pln">${slot.plan.toLocaleString()}</span>
+        <span class="ppas-pln">${accumAct[d.key].toLocaleString()}</span>
       </td>
       <td class="ppas-cell-sub" style="color:${color}">${slotOa.toFixed(1)}%</td>`;
     }).join('');
-    const secs = calcSeconds(slot.time);
     html += `<tr>
       <td class="ppas-td-time">
         ${slot.time}
         <div class="ppas-secs">${secs.toLocaleString()} sec</div>
       </td>
-      <td class="ppas-cell-diag ppas-td-plan"></td>
+      <td class="ppas-cell-diag ppas-td-plan">
+        <span class="ppas-act">${theoretical.toLocaleString()} – ${slotPlan90.toLocaleString()}</span>
+        <span class="ppas-pln">${accumTheo.toLocaleString()} – ${accumPlan.toLocaleString()}</span>
+      </td>
       ${dayCells}
     </tr>`;
   });
@@ -474,7 +518,10 @@ function renderPpasTable() {
   const planTotal = slots.reduce((s, r) => s + r.plan, 0);
   html += `<tr class="ppas-tr-total">
     <td class="ppas-td-time">TOTAL / DAY</td>
-    <td class="ppas-cell-diag ppas-td-plan"></td>
+    <td class="ppas-cell-diag ppas-td-plan">
+      <span class="ppas-act">${accumTheo.toLocaleString()} – ${accumPlan.toLocaleString()}</span>
+      <span class="ppas-pln">${accumTheo.toLocaleString()} – ${accumPlan.toLocaleString()}</span>
+    </td>
     ${DAYS.map(d => {
       const tot = actByDay(d.key).slice(0, slots.length).reduce((s, v) => s + v, 0);
       const totOa = tot / planTotal * 100;
