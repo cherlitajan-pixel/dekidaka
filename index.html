@@ -1,135 +1,296 @@
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-* { box-sizing:border-box; margin:0; padding:0; }
-.wrap { padding:10px; font-family:var(--font-sans,sans-serif); }
-.top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:6px; flex-wrap:wrap; gap:6px; }
-.ttl { font-size:16px; font-weight:500; color:var(--color-text-primary); }
-.sub { font-size:13px; color:var(--color-text-secondary); margin-top:2px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
-.legend { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-.li { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--color-text-secondary); }
-.lb { width:10px; height:10px; border-radius:2px; }
-.metrics { display:flex; gap:6px; margin-bottom:8px; }
-.mc { flex:1; background:var(--color-background-secondary); border-radius:6px; padding:6px 8px; border: 1px solid var(--color-border-tertiary,#dcdedf); }
-.ml { font-size:14px; color:var(--color-text-secondary); text-align: center; }
-.mv { font-size:24px; font-weight:500; text-align: center; display: flex; flex-direction: column; justify-content: center; min-height: 60px;}
-/* Red Points formula card */
-.mc-red-rows { margin-top:4px; display:flex; flex-direction:column; gap:2px; }
-.mc-red-row { display:flex; justify-content:space-between; align-items:center; gap:6px; }
-.mc-red-lbl { font-size:10px; color:var(--color-text-secondary); white-space:nowrap; }
-.mc-red-num { font-size:12px; font-weight:600; color:var(--color-text-primary); }
-.mc-red-divider { border:none; border-top:1px solid var(--color-border-tertiary,#d1d5db); margin:3px 0; }
-.mc-red-result-row { display:flex; justify-content:flex-end; align-items:baseline; gap:4px; }
-.mc-red-eq { font-size:10px; color:var(--color-text-secondary); }
-.mc-red-val { font-size:16px; font-weight:600; }
-.grid { display:grid; grid-template-columns:repeat(7,1fr); gap:5px; }
-.day-card { background:var(--color-background-primary); border:0.5px solid var(--color-border-tertiary); border-radius:8px; overflow:hidden; }
-.day-header { padding:5px 6px 4px; border-bottom:0.5px solid var(--color-border-tertiary); background:var(--color-background-secondary); display:flex; flex-direction:column; align-items:center; gap:2px; }
-.day-name { font-size:13px; font-weight:600; }
-.day-oa-val { font-size:11px; font-weight:600; }
-.chart-wrap { position:relative; padding:4px 4px 0; }
-.grid-outer { position:relative; }
-.axis-line { display:flex; align-items:center; gap:6px; position:absolute; left:0; right:0; z-index:20; pointer-events:none; }
-.axis-lbl { font-size:9px; font-weight:500; color:#94A3B8; white-space:nowrap; }
-.axis-hr { flex:1; height:1px; background:#94A3B8; opacity:0.4; }
+/* === Reset === */
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── Shift separator line (All Shift only) ── */
-.shift-sep { position:absolute; left:0; right:0; z-index:15; pointer-events:none; display:none; }
-.shift-sep-line { border-top:1px dashed rgba(148,163,184,0.5); margin:0 4px; }
-.shift-sep-lbl { font-size:8px; color:#94A3B8; text-align:center; margin-top:1px; }
+/* === Dot grid corners === */
+.dot-grid {
+  position: fixed; z-index: 0; pointer-events: none;
+  width: 160px; height: 160px;
+  background-image: radial-gradient(circle, rgba(90,110,145,0.18) 1.5px, transparent 1.5px);
+  background-size: 14px 14px;
+}
+.dot-grid-tl { top: 0; left: 0; }
+.dot-grid-br { bottom: 0; right: 0; }
 
-/* ── Shift dropdown ── */
-.shift-wrap { position:relative; display:inline-block; margin-top:4px; }
+/* === Base === */
+.wrap {
+  padding: 16px 20px 24px;
+  background: #E4EAF2;
+  min-height: 100vh;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  position: relative;
+  z-index: 1;
+}
+
+/* === Header === */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.header-brand {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: #9AA4B2;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.header-title h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1A2335;
+  letter-spacing: -0.01em;
+}
+.badge-model {
+  background: #E4EAF2;
+  box-shadow: 3px 3px 6px #C2C9D6, -3px -3px 6px #FFFFFF;
+  border-radius: 8px;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #378ADD;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.05em;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.legend { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.li { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #8892A4; }
+.lb { width: 10px; height: 10px; border-radius: 3px; }
+.date-badge {
+  background: #E4EAF2;
+  box-shadow: 3px 3px 7px #C2C9D6, -3px -3px 7px #FFFFFF;
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4A5570;
+  font-family: 'DM Mono', monospace;
+}
+
+/* === Shift Dropdown === */
+.shift-wrap { position: relative; display: inline-block; }
 .shift-btn {
-  display:inline-flex; align-items:center; gap:5px;
-  padding:4px 10px 4px 12px;
-  background:#2D2D2D; color:#fff;
-  border:none; border-radius:8px;
-  font-size:12px; font-weight:500;
-  cursor:pointer; user-select:none;
-  transition:background .15s;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px;
+  background: #E4EAF2;
+  box-shadow: 3px 3px 7px #C2C9D6, -3px -3px 7px #FFFFFF;
+  border: none; border-radius: 10px;
+  font-size: 13px; font-weight: 600; color: #1A2335;
+  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
+  transition: box-shadow 0.15s;
 }
-.shift-btn:hover { background:#3a3a3a; }
-.shift-btn .caret { font-size:10px; opacity:.7; }
+.shift-btn:active { box-shadow: inset 2px 2px 5px #C2C9D6, inset -1px -1px 4px #FFFFFF; }
+.shift-btn .caret { font-size: 9px; color: #9AA4B2; }
 .shift-menu {
-  display:none; position:absolute; top:calc(100% + 4px); left:0;
-  background:#2D2D2D; border-radius:10px;
-  padding:4px; min-width:150px; z-index:200;
-  box-shadow:0 4px 16px rgba(0,0,0,.35);
+  display: none; position: absolute; top: calc(100% + 6px); right: 0;
+  background: #E4EAF2;
+  box-shadow: 6px 6px 14px #C2C9D6, -4px -4px 10px #FFFFFF;
+  border-radius: 12px; padding: 6px; min-width: 160px; z-index: 200;
 }
-.shift-menu.open { display:block; }
+.shift-menu.open { display: block; }
 .shift-item {
-  display:flex; align-items:center; gap:8px;
-  padding:7px 12px; border-radius:6px;
-  font-size:13px; color:#fff;
-  cursor:pointer; white-space:nowrap;
-  transition:background .12s;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; border-radius: 8px;
+  font-size: 13px; color: #1A2335;
+  cursor: pointer; transition: background 0.12s;
 }
-.shift-item:hover { background:#3D3D3D; }
-.shift-item .chk { width:14px; font-size:12px; flex-shrink:0; }
+.shift-item:hover { background: rgba(0,0,0,0.05); }
+.shift-item .chk { width: 14px; font-size: 12px; flex-shrink: 0; }
 
-/* ── PPAS Table ── */
-.ppas-box { margin-top:30px; border:1px solid var(--color-border-tertiary,#d1d5db); border-radius:8px; overflow:hidden; }
-.ppas-box-hdr { padding:7px 12px; font-size:15px; font-weight:600; color:var(--color-text-primary); background:var(--color-background-secondary); border-bottom:1px solid var(--color-border-tertiary,#d1d5db); letter-spacing:.3px; text-align: center;}
-.ppas-wrap { overflow-x:auto; }
-.ppas-tbl { width:100%; border-collapse:collapse; font-size:11px; }
-.ppas-tbl th, .ppas-tbl td { border:0.5px solid var(--color-border-tertiary,#d1d5db); padding:4px 6px; white-space:nowrap; }
-.ppas-tbl th { background:var(--color-background-secondary); font-weight:600; text-align:center; font-size:11px; }
-.ppas-td-time { text-align:left; font-size:13px; color:var(--color-text-primary); width:110px; }
-.ppas-secs { font-size:11px; color:var(--color-text-secondary); margin-top:1px; }
-.ppas-td-plan { text-align:center; font-size:11px; color:var(--color-text-secondary); min-width:90px; }
-.ppas-th-date { text-align:center; font-size:11px; font-weight:500; }
-/* Diagonal data cell */
+/* === KPI Metrics === */
+.metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1.4fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.mc {
+  background: #E4EAF2;
+  box-shadow: 6px 6px 12px #C2C9D6, -6px -6px 12px #FFFFFF;
+  border-radius: 16px;
+  padding: 14px 16px 10px;
+  animation: fadeUp 0.45s ease both;
+}
+.ml {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: #9AA4B2; text-align: center; margin-bottom: 8px;
+}
+.mv {
+  font-size: 24px; font-weight: 700;
+  text-align: center;
+  font-family: 'DM Mono', monospace;
+  color: #1A2335;
+  min-height: 44px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding-top: 12px;
+}
+.mv-sub {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 10.5px; font-weight: 500;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  margin-top: 4px;
+}
+.mv-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%; flex-shrink: 0;
+  display: inline-block;
+}
+/* Red Points card */
+.mc-red-rows { margin-top: 2px; }
+.mc-red-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; }
+.mc-red-lbl { font-size: 11px; color: #9AA4B2; }
+.mc-red-num { font-size: 13px; font-weight: 700; color: #1A2335; font-family: 'DM Mono', monospace; }
+.mc-red-divider { border: none; border-top: 1px solid rgba(194,201,214,0.65); margin: 6px 0; }
+.mc-red-result-row { display: flex; justify-content: flex-end; align-items: baseline; gap: 6px; }
+.mc-red-eq { font-size: 11px; color: #9AA4B2; }
+.mc-red-val { font-size: 20px; font-weight: 700; font-family: 'DM Mono', monospace; }
+
+/* === 7-Day Chart Grid === */
+.grid-outer { position: relative; }
+.grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+.day-card {
+  background: #E4EAF2;
+  box-shadow: 5px 5px 10px #C2C9D6, -5px -5px 10px #FFFFFF;
+  border-radius: 14px; overflow: hidden;
+  animation: fadeUp 0.45s ease both;
+}
+.day-header {
+  padding: 7px 8px 6px;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  border-bottom: 1px solid rgba(194,201,214,0.4);
+}
+.day-name { font-size: 13px; font-weight: 700; letter-spacing: 0.03em; }
+.day-oa-val { font-size: 11px; font-weight: 600; font-family: 'DM Mono', monospace; }
+.chart-wrap {
+  position: relative; padding: 4px 4px 0;
+  margin: 6px; border-radius: 10px;
+  box-shadow: inset 3px 3px 7px #C2C9D6, inset -2px -2px 5px rgba(255,255,255,0.7);
+}
+
+/* Axis */
+.axis-line { display: flex; align-items: center; gap: 6px; position: absolute; left: 0; right: 0; z-index: 20; pointer-events: none; }
+.axis-lbl { font-size: 9px; font-weight: 500; color: #94A3B8; white-space: nowrap; }
+
+/* Shift separator */
+.shift-sep { position: absolute; left: 0; right: 0; z-index: 15; pointer-events: none; display: none; }
+.shift-sep-line { border-top: 1px dashed rgba(148,163,184,0.45); margin: 0 4px; }
+.shift-sep-lbl { font-size: 8px; color: #94A3B8; text-align: center; margin-top: 1px; }
+
+/* === PPAS Table === */
+.ppas-box {
+  margin-top: 24px;
+  background: #E4EAF2;
+  box-shadow: 6px 6px 14px #C2C9D6, -6px -6px 14px #FFFFFF;
+  border-radius: 16px; overflow: hidden;
+}
+.ppas-box-hdr {
+  padding: 10px 16px; font-size: 13px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: #4A5570; text-align: center;
+  border-bottom: 1px solid rgba(194,201,214,0.5);
+}
+.ppas-wrap { overflow-x: auto; }
+.ppas-tbl { width: 100%; border-collapse: collapse; font-size: 11px; }
+.ppas-tbl th, .ppas-tbl td { border: 0.5px solid rgba(194,201,214,0.5); padding: 4px 6px; white-space: nowrap; }
+.ppas-tbl th { background: rgba(194,201,214,0.18); font-weight: 600; text-align: center; font-size: 11px; color: #4A5570; }
+.ppas-td-time { text-align: left; font-size: 12px; color: #4A5570; width: 110px; }
+.ppas-secs { font-size: 10px; color: #9AA4B2; margin-top: 1px; font-family: 'DM Mono', monospace; }
+.ppas-td-plan { text-align: center; font-size: 11px; color: #9AA4B2; min-width: 90px; }
+.ppas-th-date { text-align: center; font-size: 11px; font-weight: 600; }
 .ppas-cell-diag {
-  position:relative; min-width:58px; min-height:38px;
-  padding:0; overflow:hidden; vertical-align:top;
+  position: relative; min-width: 58px; min-height: 38px;
+  padding: 0; overflow: hidden; vertical-align: top;
 }
 .ppas-cell-diag::before {
-  content:''; position:absolute; inset:0; pointer-events:none; z-index:0;
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 0;
   background: linear-gradient(
     to bottom right,
     transparent calc(50% - 0.5px),
-    var(--color-border-tertiary,#c8cacc) calc(50% - 0.5px),
-    var(--color-border-tertiary,#c8cacc) calc(50% + 0.5px),
+    rgba(194,201,214,0.7) calc(50% - 0.5px),
+    rgba(194,201,214,0.7) calc(50% + 0.5px),
     transparent calc(50% + 0.5px)
   );
 }
-.ppas-act  { position:absolute; top:3px; left:4px; font-size:13px; font-weight:600; z-index:1; }
-.ppas-pln  { position:absolute; bottom:3px; right:4px; font-size:12px; color:var(--color-text-secondary); z-index:1; }
-/* Dashed sub-column (right half of each day) */
-.ppas-cell-sub { min-width:36px; border-left:1px dashed var(--color-border-tertiary,#d1d5db) !important; text-align:center; vertical-align:middle; font-size:12px; font-weight:600; }
-.ppas-tr-sep td { background:rgba(148,163,184,0.08); font-size:11px; color:#94A3B8; text-align:center; padding:2px; font-style:italic; border-color:rgba(148,163,184,0.3); }
-.ppas-tr-total td { font-weight:700; background:var(--color-background-secondary); font-size:13px; text-align:center; height:55px; }
+.ppas-act { position: absolute; top: 3px; left: 4px; font-size: 12px; font-weight: 700; z-index: 1; font-family: 'DM Mono', monospace; }
+.ppas-pln { position: absolute; bottom: 3px; right: 4px; font-size: 11px; color: #9AA4B2; z-index: 1; font-family: 'DM Mono', monospace; }
+.ppas-cell-sub { min-width: 36px; border-left: 1px dashed rgba(194,201,214,0.6) !important; text-align: center; vertical-align: middle; font-size: 11px; font-weight: 600; font-family: 'DM Mono', monospace; }
+.ppas-tr-sep td { background: rgba(148,163,184,0.06); font-size: 11px; color: #9AA4B2; text-align: center; padding: 2px; font-style: italic; border-color: rgba(148,163,184,0.2); }
+.ppas-tr-total td { font-weight: 700; background: rgba(194,201,214,0.15); font-size: 12px; text-align: center; height: 55px; }
+
+/* === Animations === */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.mc:nth-child(1) { animation-delay: 0.05s; }
+.mc:nth-child(2) { animation-delay: 0.10s; }
+.mc:nth-child(3) { animation-delay: 0.15s; }
+.mc:nth-child(4) { animation-delay: 0.20s; }
+.mc:nth-child(5) { animation-delay: 0.25s; }
+.day-card:nth-child(1) { animation-delay: 0.15s; }
+.day-card:nth-child(2) { animation-delay: 0.20s; }
+.day-card:nth-child(3) { animation-delay: 0.25s; }
+.day-card:nth-child(4) { animation-delay: 0.30s; }
+.day-card:nth-child(5) { animation-delay: 0.35s; }
+.day-card:nth-child(6) { animation-delay: 0.40s; }
+.day-card:nth-child(7) { animation-delay: 0.45s; }
 </style>
 
+<div class="dot-grid dot-grid-tl"></div>
+<div class="dot-grid dot-grid-br"></div>
 <div class="wrap">
-  <div class="top">
+
+  <!-- Header -->
+  <div class="header">
     <div>
-      <div class="ttl">Production Dekidaka — 3rd SE Rotor Assy (A218)</div>
-      <div class="sub">
-        <span>Week 09/03–15/03/2026</span>
-        <span>·</span>
-        <div class="shift-wrap">
-          <button class="shift-btn" id="shift-btn" onclick="toggleShiftMenu()">
-            <span id="shift-label">All Shift</span>
-            <span class="caret">▼</span>
-          </button>
-          <div class="shift-menu" id="shift-menu">
-            <div class="shift-item" data-value="all"   onclick="selectShift('all')">  <span class="chk">✓</span>All Shift</div>
-            <div class="shift-item" data-value="day"   onclick="selectShift('day')">  <span class="chk"> </span>Day Shift</div>
-            <div class="shift-item" data-value="night" onclick="selectShift('night')"><span class="chk"> </span>Night Shift</div>
-          </div>
+      <div class="header-brand">Production Dekidaka</div>
+      <div class="header-title">
+        <h1>3rd SE Rotor Assy</h1>
+        <span class="badge-model">A218</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="legend">
+        <div class="li"><div class="lb" style="background:rgba(180,178,169,0.6)"></div>Plan</div>
+        <div class="li"><div class="lb" style="background:#2EB87A"></div>Actual (in range)</div>
+        <div class="li"><div class="lb" style="background:#E04060"></div>Actual (out of range)</div>
+        <div class="li"><div style="width:14px;border-top:1.5px dashed #378ADD"></div>%OA</div>
+        <div class="li"><div style="width:14px;border-top:1.5px dashed #185FA5;opacity:.5"></div>Target ±5%</div>
+      </div>
+      <div class="date-badge">09/03 – 15/03/2026</div>
+      <div class="shift-wrap">
+        <button class="shift-btn" id="shift-btn" onclick="toggleShiftMenu()">
+          <span id="shift-label">All Shift</span>
+          <span class="caret">▼</span>
+        </button>
+        <div class="shift-menu" id="shift-menu">
+          <div class="shift-item" data-value="all"   onclick="selectShift('all')">  <span class="chk">✓</span>All Shift</div>
+          <div class="shift-item" data-value="day"   onclick="selectShift('day')">  <span class="chk"> </span>Day Shift</div>
+          <div class="shift-item" data-value="night" onclick="selectShift('night')"><span class="chk"> </span>Night Shift</div>
         </div>
       </div>
     </div>
-    <div class="legend">
-      <div class="li"><div class="lb" style="background:rgba(180,178,169,0.6)"></div>Plan</div>
-      <div class="li"><div class="lb" style="background:#1D9E75"></div>Actual (in range)</div>
-      <div class="li"><div class="lb" style="background:#E24B4A"></div>Actual (out of range)</div>
-      <div class="li"><div style="width:14px;border-top:1.5px dashed #378ADD"></div>%OA</div>
-      <div class="li"><div style="width:14px;border-top:1.5px dashed #185FA5;opacity:.5"></div>Target ±5%</div>
-    </div>
   </div>
 
+  <!-- KPI Metrics -->
   <div class="metrics">
     <div class="mc"><div class="ml">Plan (week)</div><div class="mv" id="m-plan">—</div></div>
     <div class="mc"><div class="ml">Actual (week)</div><div class="mv" id="m-actual">—</div></div>
@@ -155,10 +316,11 @@
     </div>
   </div>
 
+  <!-- Charts -->
   <div class="grid-outer">
     <div class="axis-line" id="ax-top"></div>
     <div class="grid" id="grid"></div>
-    <div class="axis-line" id="ax-bot"><div class="axis-hr"></div></div>
+    <div class="axis-line" id="ax-bot"></div>
   </div>
 
   <!-- PPAS Table -->
@@ -168,6 +330,7 @@
       <table class="ppas-tbl" id="ppas-table"></table>
     </div>
   </div>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -175,7 +338,7 @@
 <script>
 Chart.register(ChartDataLabels);
 const DAYS = [
-  {key:'SUN', label:'Sun', color:'#E24B4A'},
+  {key:'SUN', label:'Sun', color:'#E04060'},
   {key:'MON', label:'Mon', color:'#F5C100'},
   {key:'TUE', label:'Tue', color:'#E879A0'},
   {key:'WED', label:'Wed', color:'#1DB560'},
@@ -223,17 +386,17 @@ const PPAS_NIGHT_SLOTS = [
 
 // Mock PPAS actual production per slot per day
 const PPAS_ACT_DAY = {
-  SUN: [775,700,750,720,880,720,700,890,700,750],
-  MON: [770,740,750,760,760,740,750,730,760,760],
-  TUE: [710,760,700,760,780,740,750,620,760,600],
+  SUN: [775,850,840,910,870,720,800,890,790,850],
+  MON: [770,840,840,860,860,740,750,930,850,850],
+  TUE: [710,860,800,860,870,740,750,820,760,600],
   WED: [770,760,680,740,760,680,670,730,760,760],
   THU: [770,760,700,780,760,680,780,730,780,760],
   FRI: [770,740,650,760,760,680,700,730,760,760],
   SAT: [775,700,740,780,740,660,780,730,780,760],
 };
 const PPAS_ACT_NIGHT = {
-  SUN: [760,740,750,700,740,720,740,730,780,680],
-  MON: [700,750,710,760,740,770,720,730,720,680],
+  SUN: [760,840,850,800,740,820,840,830,780,680],
+  MON: [700,840,810,760,740,770,720,730,720,680],
   TUE: [700,750,700,760,740,750,730,770,790,700],
   WED: [760,700,780,750,770,730,710,790,700,640],
   THU: [740,700,650,780,750,770,720,700,710,650],
@@ -245,7 +408,7 @@ const PPAS_ACT_NIGHT = {
 const OA_MONTH = { all: 74.2, day: 75.8, night: 72.6 };
 
 function oaColor(v) {
-  return v >= T_LO ? '#1D9E75' : '#E24B4A';
+  return v >= T_LO ? '#2EB87A' : '#E04060';
 }
 
 // ── Derive shift dataset ────────────────────────────────────────────
@@ -407,7 +570,6 @@ DAYS.forEach((d, idx_d) => {
           offset: 2,
         },
       },
-    
       scales: {
         y: {
           type:'category', labels:[], position:'left',
@@ -494,7 +656,7 @@ function renderPpasTable() {
       const v = actByDay(d.key)[i];
       accumAct[d.key] += v;
       const slotOa = v / slot.plan * 100;
-      const color = slotOa >= T_LO ? '#1D9E75' : '#E24B4A';
+      const color = slotOa >= T_LO ? '#2EB87A' : '#E04060';
       return `<td class="ppas-cell-diag">
         <span class="ppas-act" style="color:${color}">${v.toLocaleString()}</span>
         <span class="ppas-pln">${accumAct[d.key].toLocaleString()}</span>
@@ -525,7 +687,7 @@ function renderPpasTable() {
     ${DAYS.map(d => {
       const tot = actByDay(d.key).slice(0, slots.length).reduce((s, v) => s + v, 0);
       const totOa = tot / planTotal * 100;
-      const totColor = totOa >= T_LO ? '#1D9E75' : '#E24B4A';
+      const totColor = totOa >= T_LO ? '#2EB87A' : '#E04060';
       return `<td>${tot.toLocaleString()}</td>
               <td style="color:${totColor};font-size:12px;font-weight:700;text-align:center">${totOa.toFixed(1)}%</td>`;
     }).join('')}
@@ -549,7 +711,7 @@ function applyFilter() {
   const maxPlanNight = Math.max(...NIGHT_PLAN);
   const rawMax = isAll ? Math.max(maxPlanDay, maxPlanNight)
     : currentShift === 'day' ? maxPlanDay : maxPlanNight;
-  const maxPcs = Math.ceil(rawMax * 1.08 / 100) * 100; // round up to nearest 100 → clean tick
+  const maxPcs = Math.ceil(rawMax * 1.08 / 100) * 100;
 
   // Chart height
   const numRows  = isAll ? 20 : 10;
@@ -562,7 +724,7 @@ function applyFilter() {
     // Daily %OA badge — weighted: sum(actual) / sum(plan)
     const dayAvgOa = actual.reduce((a,b)=>a+b,0) / plan.reduce((a,b)=>a+b,0) * 100;
     const oaEl = document.getElementById('oa-' + d.key);
-    oaEl.textContent = dayAvgOa.toFixed(1) + '%';
+    oaEl.textContent = '%OA day ' + dayAvgOa.toFixed(1) + '%';
     oaEl.style.color = oaColor(dayAvgOa);
     const inRange = oa.map(v => v >= T_LO);
 
@@ -572,11 +734,11 @@ function applyFilter() {
     chart.data.labels = hours;
     chart.data.datasets[0].data = plan;
     chart.data.datasets[1].data = actual;
-    chart.data.datasets[1].backgroundColor = inRange.map(ok => ok ? 'rgba(29,158,117,0.85)' : 'rgba(226,75,74,0.85)');
+    chart.data.datasets[1].backgroundColor = inRange.map(ok => ok ? 'rgba(46,184,122,0.85)' : 'rgba(224,64,96,0.85)');
     chart.data.datasets[2].data = oa;
     chart.data.datasets[2].pointRadius          = oa.map(v => v >= T_LO ? 3 : 4);
-    chart.data.datasets[2].pointBackgroundColor = oa.map(v => v >= T_LO ? '#378ADD' : '#E24B4A');
-    chart.data.datasets[2].pointBorderColor     = oa.map(v => v >= T_LO ? '#378ADD' : '#E24B4A');
+    chart.data.datasets[2].pointBackgroundColor = oa.map(v => v >= T_LO ? '#2EB87A' : '#E04060');
+    chart.data.datasets[2].pointBorderColor     = oa.map(v => v >= T_LO ? '#2EB87A' : '#E04060');
 
     chart.options.scales.y.labels   = hours;
     chart.options.scales.yOA.labels = hours;
@@ -593,7 +755,6 @@ function applyFilter() {
 
   // Metrics — aggregate 7 days
   let tPlan = 0, tActual = 0, tOa = 0, redPts = 0;
-  const sampleData = getShiftData(currentShift, 'MON'); // just to get length
   DAYS.forEach(d => {
     const { plan, oa } = getShiftData(currentShift, d.key);
     plan.forEach((p, i) => {
@@ -604,21 +765,28 @@ function applyFilter() {
     });
   });
   const weekOa  = (tActual / tPlan * 100).toFixed(1);
-  const workDays = DAYS.length;                          // 7 days in this week
+  const workDays = DAYS.length;
   const avgRed  = (redPts / workDays).toFixed(1);
 
   const monthOa = OA_MONTH[currentShift].toFixed(1);
 
-  document.getElementById('m-plan').textContent        = tPlan.toLocaleString() + ' pcs.';
-  document.getElementById('m-actual').textContent      = tActual.toLocaleString() + ' pcs.';
-  document.getElementById('m-oa-month').textContent    = monthOa + '%';
-  document.getElementById('m-oa-month').style.color    = oaColor(+monthOa);
-  document.getElementById('m-oa').textContent          = weekOa + '%';
-  document.getElementById('m-oa').style.color          = oaColor(+weekOa);
+  const planColor = '#1A2335';
+  document.getElementById('m-plan').innerHTML =
+    `${tPlan.toLocaleString()}<span class="mv-sub" style="color:${planColor}">pieces</span>`;
+  document.getElementById('m-actual').innerHTML =
+    `${tActual.toLocaleString()}<span class="mv-sub" style="color:${planColor}">pieces</span>`;
+  const moColor = oaColor(+monthOa);
+  const moLabel = +monthOa >= T_LO ? 'above target' : 'below target';
+  document.getElementById('m-oa-month').innerHTML =
+    `<span style="color:${moColor}">${monthOa}%</span><span class="mv-sub" style="color:${moColor}"><span class="mv-dot" style="background:${moColor}"></span>${moLabel}</span>`;
+  const wkColor = oaColor(+weekOa);
+  const wkLabel = +weekOa >= T_LO ? 'above target' : 'below target';
+  document.getElementById('m-oa').innerHTML =
+    `<span style="color:${wkColor}">${weekOa}%</span><span class="mv-sub" style="color:${wkColor}"><span class="mv-dot" style="background:${wkColor}"></span>${wkLabel}</span>`;
   document.getElementById('m-red-total').textContent   = redPts + ' times';
   document.getElementById('m-red-days').textContent    = workDays + ' days';
   document.getElementById('m-red').textContent         = avgRed + ' times/day';
-  document.getElementById('m-red').style.color         = '#D85A30';
+  document.getElementById('m-red').style.color         = '#E04060';
 
   renderPpasTable();
 }
